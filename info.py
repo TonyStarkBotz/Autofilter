@@ -76,9 +76,9 @@ TUTORIAL = environ.get('TUTORIAL', 'https://t.me/+I7ckBD9uI8pmMjc1')
 SUPPORT_CHAT = environ.get('SUPPORT_CHAT', 'MovieTimesXDisc') # Support Chat Link Without https:// or @
 
 # True Or False
-AI_SPELL_CHECK = bool(environ.get('AI_SPELL_CHECK', "True"))
-PM_SEARCH = bool(environ.get('PM_SEARCH', "True"))
-IS_SHORTLINK = bool(environ.get('IS_SHORTLINK', "False"))
+AI_SPELL_CHECK = bool(environ.get('AI_SPELL_CHECK', True))
+PM_SEARCH = bool(environ.get('PM_SEARCH', True))
+IS_SHORTLINK = bool(environ.get('IS_SHORTLINK', False))
 MAX_BTN = is_enabled((environ.get('MAX_BTN', "True")), True)
 IS_TUTORIAL = bool(environ.get('IS_TUTORIAL', True))
 P_TTI_SHOW_OFF = is_enabled((environ.get('P_TTI_SHOW_OFF', "False")), False)
@@ -105,7 +105,7 @@ VERIFY_SND_SHORTLINK_API = environ.get('VERIFY_SND_SHORTLINK_API', '')
 VERIFY_TUTORIAL = environ.get('VERIFY_TUTORIAL', 'https://t.me/How_To_Open_Linkl')
 
 # Shortlink Info
-SHORTLINK_MODE = bool(environ.get('SHORTLINK_MODE', True))
+SHORTLINK_MODE = bool(environ.get('SHORTLINK_MODE', False))
 SHORTLINK_URL = environ.get('SHORTLINK_URL', 'api.shareus.io')
 SHORTLINK_API = environ.get('SHORTLINK_API', 'I9M09gJEv7gVgh2kz7EYAOKLLd03')
 
