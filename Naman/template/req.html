@@ -39,13 +39,12 @@
             background: #000;
         }
 
-        .video-wrapper video {
+        .video-js {
             position: absolute;
             top: 0;
             left: 0;
             width: 100%;
             height: 100%;
-            outline: none;
         }
 
         .video-meta {
@@ -57,6 +56,7 @@
             font-size: 1.5rem;
             margin-bottom: 15px;
             font-weight: 500;
+            word-break: break-word;
         }
 
         .video-actions {
@@ -95,7 +95,7 @@
         }
 
         .video-js.vjs-theme-avengers {
-            background-color: transparent;
+            background-color: #000;
         }
 
         .video-js.vjs-theme-avengers .vjs-big-play-button {
@@ -166,7 +166,7 @@
                     <div class="video-wrapper">
                         <video id="avengers-player" class="video-js vjs-theme-avengers vjs-big-play-centered" 
                                controls preload="auto" poster="https://i.postimg.cc/8P5Z5Z5Z/video-poster.jpg"
-                               data-setup='{}'>
+                               data-setup='{"fluid": true, "aspectRatio": "16:9"}'>
                             <source src="{{file_url}}" type="video/mp4">
                             <p class="vjs-no-js">
                                 To view this video please enable JavaScript, or consider upgrading to a
@@ -178,19 +178,19 @@
                     <div class="video-meta">
                         <h2 class="video-title">{{file_name}}</h2>
                         <div class="video-actions">
-                            <button class="action-btn magnet" onclick="vlc_player()">
+                            <button class="action-btn magnet" onclick="openInPlayer('vlc')">
                                 <i class="fas fa-play-circle"></i> VLC
                             </button>
-                            <button class="action-btn magnet" onclick="mx_player()">
+                            <button class="action-btn magnet" onclick="openInPlayer('mx')">
                                 <i class="fas fa-play"></i> MX Player
                             </button>
-                            <button class="action-btn magnet" onclick="playit_player()">
+                            <button class="action-btn magnet" onclick="openInPlayer('playit')">
                                 <i class="fas fa-play"></i> PLAYit
                             </button>
-                            <button class="action-btn magnet" onclick="km_player()">
+                            <button class="action-btn magnet" onclick="openInPlayer('km')">
                                 <i class="fas fa-play"></i> KM Player
                             </button>
-                            <button class="action-btn magnet" onclick="bisalDownload()">
+                            <button class="action-btn magnet" onclick="downloadVideo()">
                                 <i class="fas fa-download"></i> Download
                             </button>
                             <button class="action-btn magnet" onclick="shareVideo()">
@@ -287,6 +287,7 @@
                 preload: 'auto',
                 responsive: true,
                 fluid: true,
+                aspectRatio: '16:9',
                 userActions: {
                     hotkeys: true
                 },
@@ -298,8 +299,10 @@
                 }
             });
             
-            // Add quality selector plugin if multiple sources available
-            // player.qualitySelector();
+            // Handle video resizing
+            player.on('loadedmetadata', function() {
+                this.dimensions(this.currentWidth(), this.currentHeight());
+            });
             
             // Customize keyboard shortcuts
             player.ready(function() {
@@ -316,6 +319,36 @@
                 });
             });
         });
+
+        // Unified player function
+        function openInPlayer(playerType) {
+            const videoUrl = encodeURIComponent("{{file_url}}");
+            let playerUrl;
+            
+            switch(playerType) {
+                case 'vlc':
+                    playerUrl = `vlc://${videoUrl}`;
+                    break;
+                case 'mx':
+                    playerUrl = `intent:${videoUrl}#Intent;package=com.mxtech.videoplayer.ad;end`;
+                    break;
+                case 'playit':
+                    playerUrl = `playit://playerview/${videoUrl}`;
+                    break;
+                case 'km':
+                    playerUrl = `kmplayer://${videoUrl}`;
+                    break;
+                default:
+                    return;
+            }
+            
+            window.open(playerUrl, '_blank');
+        }
+
+        // Download function
+        function downloadVideo() {
+            window.open("{{file_url}}", '_blank');
+        }
 
         // Share function
         function shareVideo() {
@@ -334,35 +367,7 @@
             }
         }
 
-        // Original player functions (maintained for compatibility)
-        function vlc_player() {
-            window.open(`vlc://${window.location.href}`);
-        }
-
-        function mx_player() {
-            window.open(`intent:${window.location.href}#Intent;package=com.mxtech.videoplayer.ad;end`);
-        }
-
-        function playit_player() {
-            window.open(`playit://playerview/${window.location.href}`);
-        }
-
-        function km_player() {
-            window.open(`kmplayer://${window.location.href}`);
-        }
-
-        function s_player() {
-            window.open(`splayer://${window.location.href}`);
-        }
-
-        function hd_player() {
-            window.open(`hdplayer://${window.location.href}`);
-        }
-
-        function bisalDownload() {
-            window.open(`{{file_url}}`, '_blank');
-        }
-
+        // Original functions maintained for compatibility
         function bot_btn_clicked() {
             // Your existing bot button functionality
         }
