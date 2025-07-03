@@ -118,6 +118,29 @@
             line-height: 50px;
         }
 
+        /* Double-tap seek indicator */
+        .seek-indicator {
+            position: absolute;
+            width: 100px;
+            height: 100px;
+            background: rgba(240, 19, 30, 0.7);
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            color: white;
+            font-size: 24px;
+            font-weight: bold;
+            pointer-events: none;
+            z-index: 100;
+            opacity: 0;
+            transition: opacity 0.3s;
+        }
+
+        .seek-indicator.show {
+            opacity: 1;
+        }
+
         /* Responsive adjustments */
         @media (max-width: 768px) {
             .video-container {
@@ -132,6 +155,12 @@
             .action-btn {
                 padding: 8px 12px;
                 font-size: 0.8rem;
+            }
+            
+            .seek-indicator {
+                width: 80px;
+                height: 80px;
+                font-size: 20px;
             }
         }
     </style>
@@ -164,6 +193,9 @@
                 <!-- Redesigned Video Player Section -->
                 <div class="video-container">
                     <div class="video-wrapper">
+                        <!-- Seek indicator for double tap -->
+                        <div class="seek-indicator" id="seek-indicator"></div>
+                        
                         <video id="avengers-player" class="video-js vjs-theme-avengers vjs-big-play-centered" 
                                controls preload="auto" poster="https://i.postimg.cc/8P5Z5Z5Z/video-poster.jpg"
                                data-setup='{"fluid": true, "aspectRatio": "16:9"}'>
@@ -318,6 +350,55 @@
                     }
                 });
             });
+            
+            // Double-tap seek functionality
+            const videoElement = document.querySelector('.video-js');
+            const seekIndicator = document.getElementById('seek-indicator');
+            let lastTap = 0;
+            let tapTimeout;
+            
+            videoElement.addEventListener('click', function(e) {
+                const currentTime = new Date().getTime();
+                const tapLength = currentTime - lastTap;
+                
+                clearTimeout(tapTimeout);
+                
+                if (tapLength < 300 && tapLength > 0) {
+                    // Double tap detected
+                    const rect = videoElement.getBoundingClientRect();
+                    const x = e.clientX - rect.left;
+                    const videoWidth = rect.width;
+                    const seekPosition = x / videoWidth;
+                    
+                    if (seekPosition < 0.5) {
+                        // Left side - seek backward 10 seconds
+                        player.currentTime(Math.max(0, player.currentTime() - 10));
+                        showSeekIndicator('-10s', e.clientX, e.clientY);
+                    } else {
+                        // Right side - seek forward 10 seconds
+                        player.currentTime(Math.min(player.duration(), player.currentTime() + 10));
+                        showSeekIndicator('+10s', e.clientX, e.clientY);
+                    }
+                    
+                    lastTap = 0;
+                } else {
+                    tapTimeout = setTimeout(() => {
+                        lastTap = 0;
+                    }, 300);
+                    lastTap = currentTime;
+                }
+            });
+            
+            function showSeekIndicator(text, x, y) {
+                seekIndicator.textContent = text;
+                seekIndicator.style.left = (x - 50) + 'px';
+                seekIndicator.style.top = (y - 50) + 'px';
+                seekIndicator.classList.add('show');
+                
+                setTimeout(() => {
+                    seekIndicator.classList.remove('show');
+                }, 500);
+            }
         });
 
         // Unified player function
@@ -330,7 +411,7 @@
                     playerUrl = `vlc://${videoUrl}`;
                     break;
                 case 'mx':
-                    playerUrl = `intent:${openLazyLink}#Intent;package=com.mxtech.videoplayer.ad;end`;
+                    playerUrl = `intent:${videoUrl}#Intent;package=com.mxtech.videoplayer.ad;end`;
                     break;
                 case 'playit':
                     playerUrl = `playit://playerview/${videoUrl}`;
