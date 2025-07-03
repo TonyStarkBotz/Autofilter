@@ -401,34 +401,64 @@
             }
         });
 
-        // Unified player function
+         <!-- Custom Scripts -->
+    <script>
+        // Initialize Video.js player with enhanced features
+        document.addEventListener('DOMContentLoaded', function() {
+            // [Previous player initialization code remains the same]
+        });
+
+        // Unified player function with fixed MX Player intent
         function openInPlayer(playerType) {
-            const videoUrl = encodeURIComponent("{{file_url}}");
+            const videoUrl = "{{file_url}}"; // Don't encode URI here
             let playerUrl;
             
             switch(playerType) {
                 case 'vlc':
                     playerUrl = `vlc://${videoUrl}`;
+                    window.location.href = playerUrl;
                     break;
                 case 'mx':
-                    playerUrl = `intent:${videoUrl}#Intent;package=com.mxtech.videoplayer.ad;end`;
+                    // Proper MX Player intent format
+                    playerUrl = `intent:${videoUrl}#Intent;` + 
+                                `package=com.mxtech.videoplayer.ad;` +
+                                `scheme=http;` +
+                                `type=video/*;` +
+                                `S.title=${encodeURIComponent('{{file_name}}')};` +
+                                `end`;
+                    
+                    // First try to open directly in MX Player
+                    window.location.href = playerUrl;
+                    
+                    // Fallback if MX Player not installed
+                    setTimeout(function() {
+                        if(document.hidden || document.webkitHidden) {
+                            return;
+                        }
+                        window.location.href = "https://play.google.com/store/apps/details?id=com.mxtech.videoplayer.ad";
+                    }, 200);
                     break;
                 case 'playit':
                     playerUrl = `playit://playerview/${videoUrl}`;
+                    window.location.href = playerUrl;
                     break;
                 case 'km':
                     playerUrl = `kmplayer://${videoUrl}`;
+                    window.location.href = playerUrl;
                     break;
                 default:
                     return;
             }
-            
-            window.open(playerUrl, '_blank');
         }
 
-        // Download function
+        // Enhanced download function
         function downloadVideo() {
-            window.open("{{file_url}}", '_blank');
+            const link = document.createElement('a');
+            link.href = "{{file_url}}";
+            link.download = "{{file_name}}" || "video.mp4";
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
         }
 
         // Share function
