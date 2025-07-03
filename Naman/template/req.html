@@ -1,7 +1,3 @@
-<!-- this code is written by @biisal tg:biisal-files  -->
-<!-- stealing credit doesn't make you developer..so try to give full credit to the developer 😊 u will not loose anything for giving proper credit.instead  -->
-
-
 <!DOCTYPE html>
 <html lang="en">
 
@@ -9,9 +5,13 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>{{file_name}}</title>
+    <!-- Video Player CSS -->
+    <link href="https://vjs.zencdn.net/8.6.1/video-js.css" rel="stylesheet" />
+    <link href="https://unpkg.com/@videojs/themes@1/dist/avengers/index.css" rel="stylesheet">
+    <!-- SheryJS Effects -->
     <link rel="stylesheet" href="https://unpkg.com/sheryjs/dist/Shery.css" />
+    <!-- Custom CSS -->
     <link rel="stylesheet" href="https://aeditx03.github.io/resources/StreamCSS.css">
-    <link rel="stylesheet" href="https://aeditx03.github.io/resources/playerCss.css">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Josefin+Sans:wght@500;700&display=swap" rel="stylesheet">
@@ -19,22 +19,133 @@
         integrity="sha512-z3gLpd7yknf1YoNbCzqRKc4qyor8gaKU1qmn+CShxbuBusANI9QpRohGBreCFkKxLhei6S9CQXFEbbKuqLg0DA=="
         crossorigin="anonymous" referrerpolicy="no-referrer" />
     <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        /* Custom Video Player Styles */
+        .video-container {
+            max-width: 1200px;
+            margin: 20px auto;
+            padding: 20px;
+            border-radius: 12px;
+            background: #1a1a1a;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+        }
 
+        .video-wrapper {
+            position: relative;
+            padding-bottom: 56.25%; /* 16:9 aspect ratio */
+            height: 0;
+            overflow: hidden;
+            border-radius: 8px;
+            background: #000;
+        }
+
+        .video-wrapper video {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            outline: none;
+        }
+
+        .video-meta {
+            padding: 20px 0;
+        }
+
+        .video-title {
+            color: #fff;
+            font-size: 1.5rem;
+            margin-bottom: 15px;
+            font-weight: 500;
+        }
+
+        .video-actions {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+
+        .action-btn {
+            background: rgba(255, 255, 255, 0.1);
+            border: none;
+            color: white;
+            padding: 10px 15px;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 0.9rem;
+        }
+
+        .action-btn:hover {
+            background: rgba(255, 255, 255, 0.2);
+            transform: translateY(-2px);
+        }
+
+        .action-btn i {
+            font-size: 1.1rem;
+        }
+
+        /* Custom Video.js Skin */
+        .vjs-theme-avengers {
+            --vjs-theme-primary: #f0131e; /* Avengers red */
+            --vjs-theme-secondary: #2b2b2b;
+        }
+
+        .video-js.vjs-theme-avengers {
+            background-color: transparent;
+        }
+
+        .video-js.vjs-theme-avengers .vjs-big-play-button {
+            background: rgba(240, 19, 30, 0.8);
+            border: none;
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            line-height: 80px;
+            margin-left: -40px;
+            margin-top: -40px;
+        }
+
+        .video-js.vjs-theme-avengers .vjs-control-bar {
+            background: linear-gradient(transparent, rgba(0, 0, 0, 0.7));
+            height: 50px;
+        }
+
+        .video-js.vjs-theme-avengers .vjs-button > .vjs-icon-placeholder:before {
+            line-height: 50px;
+        }
+
+        /* Responsive adjustments */
+        @media (max-width: 768px) {
+            .video-container {
+                padding: 10px;
+                margin: 10px auto;
+            }
+            
+            .video-title {
+                font-size: 1.2rem;
+            }
+            
+            .action-btn {
+                padding: 8px 12px;
+                font-size: 0.8rem;
+            }
+        }
+    </style>
 </head>
-<!-- this code is written by @biisal tg:biisal-files  -->
-<!-- stealing credit doesn't make you developer..so try to give full credit to the developer 😊 u will not loose anything for giving proper credit.instead  -->
 
 <body>
     <nav>
         <div class="nleft">
             <a href="https://t.me/Avengers_Alliance">
-                <!-- if u are trying to change the header name please remove the title text from bottom line  -->
                 <h4 id="heading" style="z-index: 100;" class="magnet">AVENGERS ALLIANCE</h4>
             </a>
         </div>
         <div class="nryt">
             <a class="home-btn magnet" href="#main" onclick="toggleWidthnav(this)">HOME</a>
-
             <a href="#sec1" class="about-btn magnet" onclick="toggleWidthnav(this)">ABOUT</a>
         </div>
     </nav>
@@ -46,82 +157,83 @@
             <a href="#sec4" class="magnet contact-btn" onclick="toggleWidth(this)">LET'S TALK</a>
         </div>
     </center>
-    <!-- this code is written by @biisal tg:biisal-files  -->
-    <!-- stealing credit doesn't make you developer..so try to give full credit to the developer 😊 u will not loose anything for giving proper credit.instead  -->
 
     <div class="outer">
         <div class="inner">
             <div class="main" id="main">
-                <video id="player" class="player" src="{{file_url}}" type="video/mp4" playsinline controls
-                    width="100%"></video>
-                <div class="player"></div>
-                <div class="file-name">
-                    <h4>File name : </h4>
-                    <br>
-                    <p id="myDiv">{{file_name}}</p>
-                </div>
-                <div class="downloadBtn">
-                    <button class="magnet" onclick="vlc_player()"><img src="https://i.postimg.cc/15TQ4y7B/vlc.png"
-                            alt="">watch in VLC PLAYER</button>
-                    <button class="magnet" onclick="mx_player()"><img src="https://i.postimg.cc/sx4Msv4T/mx.png"
-                            alt="">watch in MX PLAYER</button>
-                    <button class="magnet" onclick="playit_player()"><img src="https://i.postimg.cc/RVGWYJFF/playit.png"
-                            alt="">watch in PLAYit
-                        PLAYER</button>
-                    <button class="magnet" onclick="km_player()"><img src="https://i.postimg.cc/wT9tFQ9Z/km.png"
-                            alt="">watch in KM PLAYER</button>
-                    <button class="magnet" onclick="s_player()"><img src="https://i.postimg.cc/XYJr6NGg/s.png"
-                            alt="">watch in S PLAYER</button>
-                    <button class="magnet" onclick="hd_player()"><img src="https://i.postimg.cc/rFT43LNh/hd.png"
-                            alt="">watch in HD
-                        PLAYER(4K)</button>
-                    <button class="magnet" onclick="bisalDownload()"><img style="height: 35px;"
-                            src="https://i.postimg.cc/Zncc9YLq/Pngtree-download-icon-3581467.png" alt="">download video
-                    </button>
-                </div>
-
-            </div>
-            <div class="abt">
-                <div class="about">
-                    <div class="about-dets">
-                        <div class="abt-sec" id="sec1" style="padding: 160px 30px;">
-                            <h1 style="text-align: center;">WELCOME TO OUR                  <Span>STREAMING WEBSITE</Span></h1>
-                            <p style="text-align: center; line-height: 2;word-spacing: 2px;  letter-spacing: 0.8px;">
-                                We're
-                                thrilled to have <span>you</span> here.
-                                Get ready for an
-                                amazing <span>experience</span>
-                                filled with <span>entertainment</span>, <span>fun</span>, and <span>surprises</span>.
-                                Grab
-                                your snacks, sit back, and <span>enjoy</span> the show !
+                <!-- Redesigned Video Player Section -->
+                <div class="video-container">
+                    <div class="video-wrapper">
+                        <video id="avengers-player" class="video-js vjs-theme-avengers vjs-big-play-centered" 
+                               controls preload="auto" poster="https://i.postimg.cc/8P5Z5Z5Z/video-poster.jpg"
+                               data-setup='{}'>
+                            <source src="{{file_url}}" type="video/mp4">
+                            <p class="vjs-no-js">
+                                To view this video please enable JavaScript, or consider upgrading to a
+                                web browser that <a href="https://videojs.com/html5-video-support/" target="_blank">supports HTML5 video</a>
                             </p>
+                        </video>
+                    </div>
+                    
+                    <div class="video-meta">
+                        <h2 class="video-title">{{file_name}}</h2>
+                        <div class="video-actions">
+                            <button class="action-btn magnet" onclick="vlc_player()">
+                                <i class="fas fa-play-circle"></i> VLC
+                            </button>
+                            <button class="action-btn magnet" onclick="mx_player()">
+                                <i class="fas fa-play"></i> MX Player
+                            </button>
+                            <button class="action-btn magnet" onclick="playit_player()">
+                                <i class="fas fa-play"></i> PLAYit
+                            </button>
+                            <button class="action-btn magnet" onclick="km_player()">
+                                <i class="fas fa-play"></i> KM Player
+                            </button>
+                            <button class="action-btn magnet" onclick="bisalDownload()">
+                                <i class="fas fa-download"></i> Download
+                            </button>
+                            <button class="action-btn magnet" onclick="shareVideo()">
+                                <i class="fas fa-share-alt"></i> Share
+                            </button>
                         </div>
-                        <div class="abt-sec" id="sec2">
-                            <h1>OUR ALL <span>CHANNELS</span> LIST</h1>
-                            <div class="links chnl-link">
-                                <a class="magnet" href="https://t.me/MovieTimesTV"><button>MOVIE TIMES</button></a>
-                                <a class="magnet" href="https://t.me/MovieTimesUBot"><button>MOVIE SEARCH 
-                                        BOT</button></a>
-                                <a class="magnet" href="https://t.me/RequestXUltron"><button>MOVIE SEARCH GROUP</button></a>
-                                <a class="magnet" href="https://t.me/MovieTimesXDisc"><button>MOVIE REQUEST 
-                                        GROUP</button></a>
-                                <a class="magnet" href="https://t.me/Avengers_Alliance"><button>BACKUP CHANNEL</button></a>
-                            </div>
-                        </div>
-                        <div class="abt-sec" id="sec3">
-                            <h1>OUR ALL <span>BOTS</span> LIST</h1>
-                            <div class="links bot-link">
-                                <a class="magnet" href="https://t.me/MovieTimesUBot"><button>ULTRON BOT</button></a>
-                            </div>
-                        </div>
-                        <div class="abt-sec" id="sec4">
-                            <!-- this code is written by @biisal tg:biisal-files  -->
-                            <!-- stealing credit doesn't make you developer..so try to give full credit to the developer 😊 u will not loose anything for giving proper credit.instead  -->
+                    </div>
+                </div>
 
-                            <p style="text-align: center;">YOU CAN <Span>TALK</Span> WITH US FOR YOUR <Span>SUPPORT</Span> AND YOU CAN <Span>REPORT</Span> THROUGH
-                                TELEGRAM</p>
-                            <div class="links contact">
-                                <a href="https://t.me/TonyContactBot"><button>CONTACT US</button></a>
+                <div class="abt">
+                    <div class="about">
+                        <div class="about-dets">
+                            <div class="abt-sec" id="sec1" style="padding: 160px 30px;">
+                                <h1 style="text-align: center;">WELCOME TO OUR <Span>STREAMING WEBSITE</Span></h1>
+                                <p style="text-align: center; line-height: 2;word-spacing: 2px;  letter-spacing: 0.8px;">
+                                    We're thrilled to have <span>you</span> here. Get ready for an
+                                    amazing <span>experience</span>
+                                    filled with <span>entertainment</span>, <span>fun</span>, and <span>surprises</span>.
+                                    Grab your snacks, sit back, and <span>enjoy</span> the show !
+                                </p>
+                            </div>
+                            <div class="abt-sec" id="sec2">
+                                <h1>OUR ALL <span>CHANNELS</span> LIST</h1>
+                                <div class="links chnl-link">
+                                    <a class="magnet" href="https://t.me/MovieTimesTV"><button>MOVIE TIMES</button></a>
+                                    <a class="magnet" href="https://t.me/MovieTimesUBot"><button>MOVIE SEARCH BOT</button></a>
+                                    <a class="magnet" href="https://t.me/RequestXUltron"><button>MOVIE SEARCH GROUP</button></a>
+                                    <a class="magnet" href="https://t.me/MovieTimesXDisc"><button>MOVIE REQUEST GROUP</button></a>
+                                    <a class="magnet" href="https://t.me/Avengers_Alliance"><button>BACKUP CHANNEL</button></a>
+                                </div>
+                            </div>
+                            <div class="abt-sec" id="sec3">
+                                <h1>OUR ALL <span>BOTS</span> LIST</h1>
+                                <div class="links bot-link">
+                                    <a class="magnet" href="https://t.me/MovieTimesUBot"><button>ULTRON BOT</button></a>
+                                </div>
+                            </div>
+                            <div class="abt-sec" id="sec4">
+                                <p style="text-align: center;">YOU CAN <Span>TALK</Span> WITH US FOR YOUR <Span>SUPPORT</Span> AND YOU CAN <Span>REPORT</Span> THROUGH
+                                    TELEGRAM</p>
+                                <div class="links contact">
+                                    <a href="https://t.me/TonyContactBot"><button>CONTACT US</button></a>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -130,10 +242,7 @@
         </div>
         <footer>
             <div class="mid">
-                <h1 class="mid-text">VISIT <a href="#sec3" onclick="bot_btn_clicked()"><span>OUR BOT</span></a>
-                    FOR
-                    MORE
-                    INFO</h1>
+                <h1 class="mid-text">VISIT <a href="#sec3" onclick="bot_btn_clicked()"><span>OUR BOT</span></a> FOR MORE INFO</h1>
             </div>
 
             <div class="last-text">
@@ -141,20 +250,12 @@
                     Welcome to our online streaming platform! Our website allows users to generate streamable links for
                     various files using Telegram bot. Please note that we are not responsible for the content shared or
                     streamed through our service. Users are encouraged to respect copyright laws and adhere to our
-                    community
-                    guidelines. Enjoy easy, hassle-free file streaming service.
+                    community guidelines. Enjoy easy, hassle-free file streaming service.
                 </p>
             </div>
-
-            <!-- this code is written by @biisal tg:biisal-files  -->
-            <!-- stealing credit doesn't make you developer..so try to give full credit to the developer 😊 u will not loose anything for giving proper credit.instead  -->
-
-
-
             <div class="copyright ">
-                <h5 class="text-center">Copyright © 2024 <a href="https://t.me/Tony_Stark_75"><span
-                            style="font-weight: 700;">Tony Stark</span></a>. All
-                    Rights Reserved.</h5>
+                <h5 class="text-center">Copyright © 2024 <a href="https://t.me/DigitalGalaxyHQ"><span
+                            style="font-weight: 700;">DigitalGalaxyHQ</span></a>. All Rights Reserved.</h5>
                 <div class="icons">
                     <a href="https://github.com/DigitalGalaxyHQ"><i class="fa-brands fa-github fa-lg"></i></a>
                     <a href="https://t.me/DigitalGalaxyHQ"><i class="fa-brands fa-telegram fa-lg"></i></a>
@@ -163,31 +264,117 @@
                         href="https://t.me/Tony_Stark_75"><span>Tony Stark</span></a></h4>
             </div>
         </footer>
-</body>
+    </div>
 
-
-<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/0.155.0/three.min.js"></script>
-<script src="https://cdn.jsdelivr.net/gh/automat/controlkit.js@master/bin/controlKit.min.js"></script>
-<script type="text/javascript" src="https://cdn.jsdelivr.net/npm/sheryjs/dist/Shery.js"></script>
-<script>
-    document.addEventListener("DOMContentLoaded", function () {
-        const uncopyableElement = document.querySelector(".uncopyable");
-
-        uncopyableElement.addEventListener("selectstart", function (event) {
-            event.preventDefault();
+    <!-- JavaScript Libraries -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/0.155.0/three.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/gh/automat/controlkit.js@master/bin/controlKit.min.js"></script>
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/sheryjs/dist/Shery.js"></script>
+    
+    <!-- Video Player JS -->
+    <script src="https://vjs.zencdn.net/8.6.1/video.min.js"></script>
+    <script src="https://unpkg.com/videojs-hotkeys@0.2.28/dist/videojs.hotkeys.min.js"></script>
+    
+    <!-- Custom Scripts -->
+    <script>
+        // Initialize Video.js player with enhanced features
+        document.addEventListener('DOMContentLoaded', function() {
+            const player = videojs('avengers-player', {
+                controls: true,
+                autoplay: false,
+                preload: 'auto',
+                responsive: true,
+                fluid: true,
+                userActions: {
+                    hotkeys: true
+                },
+                plugins: {
+                    hotkeys: {
+                        enableModifiersForNumbers: false,
+                        seekStep: 10
+                    }
+                }
+            });
+            
+            // Add quality selector plugin if multiple sources available
+            // player.qualitySelector();
+            
+            // Customize keyboard shortcuts
+            player.ready(function() {
+                this.hotkeys({
+                    volumeStep: 0.1,
+                    seekStep: 5,
+                    enableModifiersForNumbers: false,
+                    fullscreenKey: function(event) {
+                        return (event.key === 'f' || event.key === 'F');
+                    },
+                    muteKey: function(event) {
+                        return (event.key === 'm' || event.key === 'M');
+                    }
+                });
+            });
         });
-    });
-</script>
-<script src="js/wow.min.js"></script>
-<script>
-    new WOW().init();
-</script>
-<script src="https://cdn.plyr.io/3.6.9/plyr.js"></script>
-<script src="https://aeditx03.github.io/resources/StreamJs.js"></script>
 
+        // Share function
+        function shareVideo() {
+            if (navigator.share) {
+                navigator.share({
+                    title: 'Watch: {{file_name}}',
+                    text: 'Check out this video on Avengers Alliance',
+                    url: window.location.href
+                }).catch(err => {
+                    console.log('Error sharing:', err);
+                });
+            } else {
+                // Fallback for browsers that don't support Web Share API
+                const shareUrl = `https://t.me/share/url?url=${encodeURIComponent(window.location.href)}&text=Watch ${encodeURIComponent('{{file_name}}')}`;
+                window.open(shareUrl, '_blank');
+            }
+        }
+
+        // Original player functions (maintained for compatibility)
+        function vlc_player() {
+            window.open(`vlc://${window.location.href}`);
+        }
+
+        function mx_player() {
+            window.open(`intent:${window.location.href}#Intent;package=com.mxtech.videoplayer.ad;end`);
+        }
+
+        function playit_player() {
+            window.open(`playit://playerview/${window.location.href}`);
+        }
+
+        function km_player() {
+            window.open(`kmplayer://${window.location.href}`);
+        }
+
+        function s_player() {
+            window.open(`splayer://${window.location.href}`);
+        }
+
+        function hd_player() {
+            window.open(`hdplayer://${window.location.href}`);
+        }
+
+        function bisalDownload() {
+            window.open(`{{file_url}}`, '_blank');
+        }
+
+        function bot_btn_clicked() {
+            // Your existing bot button functionality
+        }
+
+        function toggleWidth(elem) {
+            // Your existing toggle functionality
+        }
+
+        function toggleWidthnav(elem) {
+            // Your existing nav toggle functionality
+        }
+    </script>
+    <script src="https://aeditx03.github.io/resources/StreamJs.js"></script>
+</body>
 </html>
-
-<!-- this code is written by @biisal tg:biisal-files  -->
-<!-- stealing credit doesn't make you developer..so try to give full credit to the developer 😊 u will not loose anything for giving proper credit.instead  -->
