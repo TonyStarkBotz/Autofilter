@@ -200,7 +200,7 @@ Nᴀᴍᴇ - {}"""
 
 𝗠𝗲𝘀𝘀𝗮𝗴𝗲 <b>: {}</b>"""
 
-    CAPTION = """📂 <i><a href="https://t.me/Avengers_Alliance">{file_name}</a></i>\n\n"""
+    CAPTION = """📂 <i><a href="https://t.me/TheAvengersLeague">{file_name}</a></i>\n\n"""
 
     IMDB_TEMPLATE_TXT = """<b>ʜᴇʏ {message.from_user.mention}, ʜᴇʀᴇ ɪꜱ ᴛʜᴇ ʀᴇꜱᴜʟᴛꜱ ꜰᴏʀ ʏᴏᴜʀ ǫᴜᴇʀʏ {search}.
 
